@@ -24,24 +24,19 @@ public class BoardApiTests extends AbstractTest {
     @Test(dataProvider = "createBoardDataProvider",
             dataProviderClass = DataProvidersForBoardsApi.class)
     public void createBoardWithValidParameters(Map<String, String> parameters) {
-        BoardDto testBoard = BoardsApi.getBoardFromResponse(requestBuilder()
+        String boardId = BoardsApi.getBoardFromResponse(requestBuilder()
                 .withName(parameters.get(BoardParameterName.NAME))
                 .withDescription(parameters.get(BoardParameterName.DESCRIPTION))
-                .setMethod(Method.POST)
+                .withMethod(Method.POST)
                 .buildRequest()
-                .sendRequest());
-        BoardDto receivedBoard = BoardsApi.getBoardFromResponse(
-                requestBuilder()
-                        .setId(testBoard.getId())
-                        .setUrl(CommonValues.ID_PATH_PARAM)
-                        .buildRequest()
-                        .sendRequest());
+                .sendRequest()).getId();
+        BoardDto receivedBoard = BoardsServiceSteps.getBoard(boardId);
         assertThat(
                 "Response should contain proper board",
                 receivedBoard,
                 Matchers.hasProperty(
                         BoardParameterName.ID,
-                        Matchers.is(testBoard.getId())
+                        Matchers.is(boardId)
                 )
         );
     }
@@ -50,7 +45,7 @@ public class BoardApiTests extends AbstractTest {
     @Test
     public void createBoardWithNoParameters() {
         requestBuilder()
-                .setMethod(Method.POST)
+                .withMethod(Method.POST)
                 .buildRequest()
                 .sendRequest()
                 .then()
@@ -60,36 +55,29 @@ public class BoardApiTests extends AbstractTest {
     //3
     @Test
     public void createMaxAvailableNumberOfBoardsForNonPremiumUser() {
-        int testNumberOfBoards = CommonValues.MAX_BOARDS_AVAILABLE_NON_PREMIUM + 1;
-        for (int i = 1; i <= testNumberOfBoards; i++) {
-            Response createBoardResponse = requestBuilder()
-                    .setMethod(Method.POST)
-                    .withName("Board №" + i)
-                    .buildRequest()
-                    .sendRequest();
-            if (i < testNumberOfBoards) {
-                createBoardResponse.then().spec(ResponseValidator.success());
-            } else {
-                createBoardResponse.then().spec(ResponseValidator.badRequest());
-            }
+        for (int i = 0; i < CommonValues.MAX_BOARDS_AVAILABLE_NON_PREMIUM; i++) {
+            BoardsServiceSteps.createBoard();
         }
+        requestBuilder()
+                .withMethod(Method.POST)
+                .withName("failed query")
+                .buildRequest()
+                .sendRequest()
+                .then()
+                .spec(ResponseValidator.badRequest());
     }
 
     //4
     @Test
     public void getExistingBoard() {
-        String testBoardId = createTestBoard().getId();
-        BoardDto receivedBoard = BoardsApi.getBoardFromResponse(requestBuilder()
-                .setId(testBoardId)
-                .setUrl(CommonValues.ID_PATH_PARAM)
-                .buildRequest()
-                .sendRequest());
+        String boardId = createTestBoard().getId();
+        BoardDto receivedBoard = BoardsServiceSteps.getBoard(boardId);
         assertThat(
                 "Response should contain proper board",
                 receivedBoard,
                 Matchers.hasProperty(
                         BoardParameterName.ID,
-                        Matchers.is(testBoardId)
+                        Matchers.is(boardId)
                 )
         );
     }
@@ -97,22 +85,16 @@ public class BoardApiTests extends AbstractTest {
     //5
     @Test
     public void getNonExistingBoard() {
-        String testBoardId = createTestBoard().getId();
-        BoardsServiceSteps.deleteBoard(testBoardId);
-        requestBuilder()
-                .setId(testBoardId)
-                .setUrl(CommonValues.ID_PATH_PARAM)
-                .buildRequest()
-                .sendRequest()
-                .then()
-                .spec(ResponseValidator.notFound());
+        String boardId = createTestBoard().getId();
+        BoardsServiceSteps.deleteBoard(boardId);
+        checkThatBoardNotFound(boardId);
     }
 
     //6
     @Test(dataProvider = "updateBoardDataProvider",
             dataProviderClass = DataProvidersForBoardsApi.class)
     public void updateBoardTest(Map<String, Object> parameters) {
-        BoardDto testBoard = createTestBoard();
+        String boardId = createTestBoard().getId();
 
         String name = (String) parameters.get(BoardParameterName.NAME);
         String desc = (String) parameters.get(BoardParameterName.DESCRIPTION);
@@ -120,9 +102,9 @@ public class BoardApiTests extends AbstractTest {
 
         BoardDto updatedBoard = getBoardFromResponse(
                 requestBuilder()
-                        .setMethod(Method.PUT)
-                        .setId(testBoard.getId())
-                        .setUrl(CommonValues.ID_PATH_PARAM)
+                        .withMethod(Method.PUT)
+                        .withId(boardId)
+                        .withUrl(CommonValues.ID_PATH_PARAM)
                         .withName(name)
                         .withDescription(desc)
                         .closed(closed)
@@ -143,13 +125,13 @@ public class BoardApiTests extends AbstractTest {
     //7
     @Test
     public void updateNonExistingBoardTest() {
-        BoardDto testBoard = createTestBoard();
-        BoardsServiceSteps.deleteBoard(testBoard.getId());
+        String boardId = createTestBoard().getId();
+        BoardsServiceSteps.deleteBoard(boardId);
         BoardsApi.requestBuilder()
-                .setMethod(Method.PUT)
-                .setUrl(CommonValues.ID_PATH_PARAM)
-                .setId(testBoard.getId())
-                .withName("Failed update")
+                .withMethod(Method.PUT)
+                .withUrl(CommonValues.ID_PATH_PARAM)
+                .withId(boardId)
+                .withName("failed query")
                 .buildRequest()
                 .sendRequest()
                 .then()
@@ -159,29 +141,24 @@ public class BoardApiTests extends AbstractTest {
     //8
     @Test
     public void deleteBoardTest() {
-        BoardDto testBoard = createTestBoard();
-        BoardsServiceSteps.deleteBoard(testBoard.getId());
-        BoardsApi.requestBuilder()
-                .setId(testBoard.getId())
-                .setUrl(CommonValues.ID_PATH_PARAM)
-                .buildRequest()
-                .sendRequest()
-                .then()
-                .spec(ResponseValidator.notFound());
+        String boardId = createTestBoard().getId();
+        BoardsServiceSteps.deleteBoard(boardId);
+        checkThatBoardNotFound(boardId);
     }
 
     //9
     @Test
     public void deleteNonExistingBoardTest() {
-        BoardDto testBoard = createTestBoard();
-        for (int i = 0; i < 2; i++) {
-            Response deleteBoardResponse = BoardsServiceSteps.deleteBoard(testBoard.getId());
-            if (i == 0) {
-                deleteBoardResponse.then().spec(ResponseValidator.success());
-            } else {
-                deleteBoardResponse.then().spec(ResponseValidator.notFound());
-            }
-        }
+        String boardId = createTestBoard().getId();
+        BoardsServiceSteps.deleteBoard(boardId);
+        BoardsApi.requestBuilder()
+                .withId(boardId)
+                .withMethod(Method.DELETE)
+                .withUrl(CommonValues.ID_PATH_PARAM)
+                .buildRequest()
+                .sendRequest()
+                .then()
+                .spec(ResponseValidator.notFound());
     }
 
     //10
@@ -190,11 +167,21 @@ public class BoardApiTests extends AbstractTest {
         BoardDto testBoard = createTestBoard();
         Response getFieldResponse = BoardsApi
                 .requestBuilder()
-                .setField(BoardFieldName.NAME)
-                .setId(testBoard.getId())
-                .setUrl("/{id}/{field}")
+                .withField(BoardFieldName.NAME)
+                .withId(testBoard.getId())
+                .withUrl("/{id}/{field}")
                 .buildRequest()
                 .sendRequest();
         getFieldResponse.then().assertThat().body("_value", Matchers.containsString(testBoard.getName()));
+    }
+
+    private void checkThatBoardNotFound(String boardId) {
+        BoardsApi.requestBuilder()
+                .withId(boardId)
+                .withUrl(CommonValues.ID_PATH_PARAM)
+                .buildRequest()
+                .sendRequest()
+                .then()
+                .spec(ResponseValidator.notFound());
     }
 }

@@ -77,22 +77,22 @@ public class BoardsApi {
         private Method method = Method.GET;
         private String url = "";
 
-        public BoardsApiRequestBuilder setUrl(String url) {
+        public BoardsApiRequestBuilder withUrl(String url) {
             this.url = url;
             return this;
         }
 
-        public BoardsApiRequestBuilder setMethod(Method method) {
+        public BoardsApiRequestBuilder withMethod(Method method) {
             this.method = method;
             return this;
         }
 
-        public BoardsApiRequestBuilder setField(String field) {
+        public BoardsApiRequestBuilder withField(String field) {
             this.pathParams.put(BoardParameterName.FIELD, field);
             return this;
         }
 
-        public BoardsApiRequestBuilder setId(String id) {
+        public BoardsApiRequestBuilder withId(String id) {
             this.pathParams.put(BoardParameterName.ID, id);
             return this;
         }

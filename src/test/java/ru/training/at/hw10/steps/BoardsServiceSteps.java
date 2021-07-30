@@ -4,31 +4,39 @@ import beans.BoardDto;
 import constants.CommonValues;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
+import ru.training.at.hw10.utils.ResponseValidator;
 import service.BoardsApi;
 
 public class BoardsServiceSteps {
     public static BoardDto createBoard() {
-        return BoardsApi.getBoardFromResponse(BoardsApi.requestBuilder()
+        Response response = BoardsApi.requestBuilder()
                 .withName("Some board")
                 .withDescription("Description of some board")
-                .setMethod(Method.POST)
+                .withMethod(Method.POST)
                 .buildRequest()
-                .sendRequest());
+                .sendRequest();
+        response.then().spec(ResponseValidator.success());
+        return BoardsApi.getBoardFromResponse(response);
     }
 
     public static BoardDto getBoard(String id) {
-        return BoardsApi.getBoardFromResponse(BoardsApi.requestBuilder()
-                .setId(id)
-                .buildRequest()
-                .sendRequest());
-    }
-
-    public static Response deleteBoard(String id) {
-        return BoardsApi.requestBuilder()
-                .setId(id)
-                .setMethod(Method.DELETE)
-                .setUrl(CommonValues.ID_PATH_PARAM)
+        Response response = BoardsApi.requestBuilder()
+                .withId(id)
+                .withUrl(CommonValues.ID_PATH_PARAM)
                 .buildRequest()
                 .sendRequest();
+        response.then().spec(ResponseValidator.success());
+        return BoardsApi.getBoardFromResponse(response);
+    }
+
+    public static void deleteBoard(String id) {
+        BoardsApi.requestBuilder()
+                .withId(id)
+                .withMethod(Method.DELETE)
+                .withUrl(CommonValues.ID_PATH_PARAM)
+                .buildRequest()
+                .sendRequest()
+                .then()
+                .spec(ResponseValidator.success());
     }
 }

@@ -28,9 +28,9 @@ public abstract class AbstractTest {
         for (BoardDto board : boards) {
             if (board.getIdMemberCreator().equals(CommonValues.MEMBER_CREATOR_ID)) {
                 BoardsApi.requestBuilder()
-                        .setMethod(Method.DELETE)
-                        .setId(board.getId())
-                        .setUrl(CommonValues.ID_PATH_PARAM)
+                        .withMethod(Method.DELETE)
+                        .withId(board.getId())
+                        .withUrl(CommonValues.ID_PATH_PARAM)
                         .buildRequest()
                         .sendRequest()
                         .then()
