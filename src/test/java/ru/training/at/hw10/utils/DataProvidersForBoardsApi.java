@@ -1,30 +1,40 @@
 package ru.training.at.hw10.utils;
 
+import constants.BoardParameterName;
+import java.util.Map;
 import org.testng.annotations.DataProvider;
-import ru.training.at.hw10.constants.BoardFieldName;
 
 public class DataProvidersForBoardsApi {
 
     @DataProvider
     public static Object[][] createBoardDataProvider() {
         return new Object[][]{
-                {BoardsApiTestDataSet.getNewBoardMinimalValidParameters()}
+                {
+                        Map.of(
+                                BoardParameterName.NAME, "NewAwesomeBoard",
+                                BoardParameterName.DESCRIPTION, "NewAwesomeBoardDescription"
+                        )
+                }
         };
     }
 
     @DataProvider
-    public Object[][] updateBoardDataProvider() {
+    public static Object[][] updateBoardDataProvider() {
         return new Object[][]{
-                {BoardsApiTestDataSet.getUpdatedBoardMinimalValidParameters()}
-        };
-    }
-
-    @DataProvider
-    public Object[][] getFieldOnBoardDataProvider() {
-        return new Object[][]{
-                {BoardFieldName.ID_MEMBER_CREATOR},
-                {BoardFieldName.DESC},
-                {BoardFieldName.NAME}
+                {
+                        Map.of(
+                                BoardParameterName.NAME, "UpdatedAwesomeBoard",
+                                BoardParameterName.DESCRIPTION, "UpdatedAwesomeBoardDescription",
+                                BoardParameterName.CLOSED, true
+                        )
+                },
+                {
+                        Map.of(
+                                BoardParameterName.NAME, "UpdatedAwesomeBoard2",
+                                BoardParameterName.DESCRIPTION, "UpdatedAwesomeBoardDescription2",
+                                BoardParameterName.CLOSED, true
+                        )
+                }
         };
     }
 }

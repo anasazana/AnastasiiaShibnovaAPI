@@ -1,71 +1,34 @@
 package ru.training.at.hw10.steps;
 
+import beans.BoardDto;
+import constants.CommonValues;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
-import java.util.List;
-import java.util.Map;
-import org.hamcrest.Matchers;
-import ru.training.at.hw10.beans.BoardDto;
-import ru.training.at.hw10.constants.CommonValues;
-import ru.training.at.hw10.service.BoardsApi;
-import ru.training.at.hw10.utils.BoardsResponseValidator;
+import service.BoardsApi;
 
 public class BoardsServiceSteps {
-
-    public static Response createBoard(Map<String, String> parameters) {
-        return BoardsApi.requestBuilder()
-                .addParameters(parameters)
+    public static BoardDto createBoard() {
+        return BoardsApi.getBoardFromResponse(BoardsApi.requestBuilder()
+                .withName("Some board")
+                .withDescription("Description of some board")
+                .setMethod(Method.POST)
                 .buildRequest()
-                .createBoard();
+                .sendRequest());
     }
 
-    public static Response getBoard(String id) {
-        return BoardsApi.requestBuilder()
+    public static BoardDto getBoard(String id) {
+        return BoardsApi.getBoardFromResponse(BoardsApi.requestBuilder()
                 .setId(id)
                 .buildRequest()
-                .getBoard();
+                .sendRequest());
     }
 
     public static Response deleteBoard(String id) {
         return BoardsApi.requestBuilder()
                 .setId(id)
+                .setMethod(Method.DELETE)
+                .setUrl(CommonValues.ID_PATH_PARAM)
                 .buildRequest()
-                .deleteBoard();
-    }
-
-    public static Response updateBoard(Map<String, String> parameters, String id) {
-        return BoardsApi.requestBuilder()
-                .addParameters(parameters)
-                .setId(id)
-                .buildRequest()
-                .updateBoard();
-    }
-
-    public static Response getAllBoards() {
-        return BoardsApi.requestBuilder()
-                .buildRequest()
-                .getAllBoards();
-    }
-
-    public static void deleteAllMyBoards(List<BoardDto> boards) {
-        for (BoardDto board : boards) {
-            if (board.getIdMemberCreator().equals(CommonValues.MEMBER_CREATOR_ID)) {
-                BoardsResponseValidator.checkResponseIsOK(deleteBoard(board.getId()));
-            }
-        }
-    }
-
-    public static Response getFieldOnBoard(String id, String fieldName) {
-        return BoardsApi.requestBuilder()
-                .setId(id)
-                .buildRequest()
-                .getFieldOnBoard(fieldName);
-    }
-
-    public static void checkResponseContainsExpectedParameters(Response response, Map<String, String> parameters) {
-        ValidatableResponse updatedResponse = response.then().assertThat();
-        for (Map.Entry<String, String> parameter : parameters.entrySet()) {
-            updatedResponse.body(parameter.getKey(), Matchers.containsString(parameter.getValue()));
-        }
+                .sendRequest();
     }
 }

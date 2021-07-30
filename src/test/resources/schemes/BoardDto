@@ -1,11 +1,6 @@
 {
     "name": "UpdatedAwesomeBoard",
     "desc": "UpdatedAwesomeBoardDescription",
-    "descData": {
-        "emoji": {
-
-        }
-    },
     "closed": false,
     "dateClosed": null,
     "idOrganization": "60620ff07fec4020fedb84d1",
@@ -13,13 +8,7 @@
     "limits": null,
     "pinned": null,
     "shortLink": "sy5I1f4M",
-    "powerUps": [
-
-    ],
     "dateLastActivity": null,
-    "idTags": [
-
-    ],
     "datePluginDisable": null,
     "creationMethod": "automatic",
     "ixUpdate": null,
@@ -29,49 +18,9 @@
     "id": "60faf3c634dda96a2f0a9ca2",
     "starred": false,
     "url": "https://trello.com/b/sy5I1f4M/updatedawesomeboard",
-    "prefs": {
-        "permissionLevel": "private",
-        "hideVotes": false,
-        "voting": "disabled",
-        "comments": "members",
-        "invitations": "members",
-        "selfJoin": true,
-        "cardCovers": true,
-        "isTemplate": false,
-        "cardAging": "regular",
-        "calendarFeedEnabled": false,
-        "background": "blue",
-        "backgroundImage": null,
-        "backgroundImageScaled": null,
-        "backgroundTile": false,
-        "backgroundBrightness": "dark",
-        "backgroundColor": "#0079BF",
-        "backgroundBottomColor": "#0079BF",
-        "backgroundTopColor": "#0079BF",
-        "canBePublic": true,
-        "canBeEnterprise": true,
-        "canBeOrg": true,
-        "canBePrivate": true,
-        "canInvite": true
-    },
     "subscribed": false,
-    "labelNames": {
-        "green": "",
-        "yellow": "",
-        "orange": "",
-        "red": "",
-        "purple": "",
-        "blue": "",
-        "sky": "",
-        "lime": "",
-        "pink": "",
-        "black": ""
-    },
     "shortUrl": "https://trello.com/b/sy5I1f4M",
     "templateGallery": null,
-    "premiumFeatures": [
-
-    ],
     "memberships": [
         {
             "id": "60faf3c634dda96a2f0a9ca6",

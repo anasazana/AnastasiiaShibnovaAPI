@@ -3,7 +3,7 @@
 <suite name="TrelloBoardApiTestSuite">
     <test name="BoardsApiTest">
         <classes>
-            <class name="ru.training.at.hw10.tests.BoardsApiTests"/>
+            <class name="ru.training.at.hw10.tests.BoardApiTests"/>
         </classes>
     </test>
 </suite>
