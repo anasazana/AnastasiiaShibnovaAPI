@@ -1,6 +1,6 @@
 package ru.training.at.hw10.utils;
 
-import constants.BoardParameterName;
+import constants.BoardParameter;
 import java.util.Map;
 import org.testng.annotations.DataProvider;
 
@@ -11,8 +11,8 @@ public class DataProvidersForBoardsApi {
         return new Object[][]{
                 {
                         Map.of(
-                                BoardParameterName.NAME, "NewAwesomeBoard",
-                                BoardParameterName.DESCRIPTION, "NewAwesomeBoardDescription"
+                                BoardParameter.NAME, "NewAwesomeBoard",
+                                BoardParameter.DESC, "NewAwesomeBoardDescription"
                         )
                 }
         };
@@ -23,16 +23,16 @@ public class DataProvidersForBoardsApi {
         return new Object[][]{
                 {
                         Map.of(
-                                BoardParameterName.NAME, "UpdatedAwesomeBoard",
-                                BoardParameterName.DESCRIPTION, "UpdatedAwesomeBoardDescription",
-                                BoardParameterName.CLOSED, true
+                                BoardParameter.NAME, "UpdatedAwesomeBoard",
+                                BoardParameter.DESC, "UpdatedAwesomeBoardDescription",
+                                BoardParameter.CLOSED, true
                         )
                 },
                 {
                         Map.of(
-                                BoardParameterName.NAME, "UpdatedAwesomeBoard2",
-                                BoardParameterName.DESCRIPTION, "UpdatedAwesomeBoardDescription2",
-                                BoardParameterName.CLOSED, true
+                                BoardParameter.NAME, "UpdatedAwesomeBoard2",
+                                BoardParameter.DESC, "UpdatedAwesomeBoardDescription2",
+                                BoardParameter.CLOSED, true
                         )
                 }
         };

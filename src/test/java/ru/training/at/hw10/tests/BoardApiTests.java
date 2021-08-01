@@ -5,8 +5,7 @@ import static service.BoardsApi.getBoardFromResponse;
 import static service.BoardsApi.requestBuilder;
 
 import beans.BoardDto;
-import constants.BoardFieldName;
-import constants.BoardParameterName;
+import constants.BoardParameter;
 import constants.CommonValues;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
@@ -25,8 +24,8 @@ public class BoardApiTests extends AbstractTest {
             dataProviderClass = DataProvidersForBoardsApi.class)
     public void createBoardWithValidParameters(Map<String, String> parameters) {
         String boardId = BoardsApi.getBoardFromResponse(requestBuilder()
-                .withName(parameters.get(BoardParameterName.NAME))
-                .withDescription(parameters.get(BoardParameterName.DESCRIPTION))
+                .withName(parameters.get(BoardParameter.NAME))
+                .withDescription(parameters.get(BoardParameter.DESC))
                 .withMethod(Method.POST)
                 .buildRequest()
                 .sendRequest()).getId();
@@ -35,7 +34,7 @@ public class BoardApiTests extends AbstractTest {
                 "Response should contain proper board",
                 receivedBoard,
                 Matchers.hasProperty(
-                        BoardParameterName.ID,
+                        BoardParameter.ID,
                         Matchers.is(boardId)
                 )
         );
@@ -76,7 +75,7 @@ public class BoardApiTests extends AbstractTest {
                 "Response should contain proper board",
                 receivedBoard,
                 Matchers.hasProperty(
-                        BoardParameterName.ID,
+                        BoardParameter.ID,
                         Matchers.is(boardId)
                 )
         );
@@ -96,9 +95,9 @@ public class BoardApiTests extends AbstractTest {
     public void updateBoardTest(Map<String, Object> parameters) {
         String boardId = createTestBoard().getId();
 
-        String name = (String) parameters.get(BoardParameterName.NAME);
-        String desc = (String) parameters.get(BoardParameterName.DESCRIPTION);
-        boolean closed = (boolean) parameters.get(BoardParameterName.CLOSED);
+        String name = (String) parameters.get(BoardParameter.NAME);
+        String desc = (String) parameters.get(BoardParameter.DESC);
+        boolean closed = (boolean) parameters.get(BoardParameter.CLOSED);
 
         BoardDto updatedBoard = getBoardFromResponse(
                 requestBuilder()
@@ -115,9 +114,9 @@ public class BoardApiTests extends AbstractTest {
                 "Board in response should be updated",
                 updatedBoard,
                 Matchers.allOf(
-                        Matchers.hasProperty(BoardParameterName.NAME, Matchers.is(name)),
-                        Matchers.hasProperty(BoardParameterName.DESCRIPTION, Matchers.is(desc)),
-                        Matchers.hasProperty(BoardParameterName.CLOSED, Matchers.is(closed))
+                        Matchers.hasProperty(BoardParameter.NAME, Matchers.is(name)),
+                        Matchers.hasProperty(BoardParameter.DESC, Matchers.is(desc)),
+                        Matchers.hasProperty(BoardParameter.CLOSED, Matchers.is(closed))
                 )
         );
     }
@@ -167,12 +166,13 @@ public class BoardApiTests extends AbstractTest {
         BoardDto testBoard = createTestBoard();
         Response getFieldResponse = BoardsApi
                 .requestBuilder()
-                .withField(BoardFieldName.NAME)
+                .withField(BoardParameter.NAME)
                 .withId(testBoard.getId())
-                .withUrl("/{id}/{field}")
+                .withUrl(CommonValues.ID_PATH_PARAM + CommonValues.FIELD_PATH_PARAM)
                 .buildRequest()
                 .sendRequest();
-        getFieldResponse.then().assertThat().body("_value", Matchers.containsString(testBoard.getName()));
+        getFieldResponse.then().assertThat().body("_value",
+                Matchers.containsString(testBoard.getName()));
     }
 
     private void checkThatBoardNotFound(String boardId) {

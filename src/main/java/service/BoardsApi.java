@@ -3,7 +3,7 @@ package service;
 import beans.BoardDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import constants.BoardParameterName;
+import constants.BoardParameter;
 import constants.CommonValues;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -88,33 +88,33 @@ public class BoardsApi {
         }
 
         public BoardsApiRequestBuilder withField(String field) {
-            this.pathParams.put(BoardParameterName.FIELD, field);
+            this.pathParams.put(BoardParameter.FIELD, field);
             return this;
         }
 
         public BoardsApiRequestBuilder withId(String id) {
-            this.pathParams.put(BoardParameterName.ID, id);
+            this.pathParams.put(BoardParameter.ID, id);
             return this;
         }
 
         public BoardsApiRequestBuilder withDescription(String desc) {
-            parameters.put(BoardParameterName.DESCRIPTION, desc);
+            parameters.put(BoardParameter.DESC, desc);
             return this;
         }
 
         public BoardsApiRequestBuilder withName(String name) {
-            parameters.put(BoardParameterName.NAME, name);
+            parameters.put(BoardParameter.NAME, name);
             return this;
         }
 
         public BoardsApiRequestBuilder closed(boolean closed) {
-            parameters.put(BoardParameterName.CLOSED, Boolean.toString(closed));
+            parameters.put(BoardParameter.CLOSED, Boolean.toString(closed));
             return this;
         }
 
         public BoardsApi buildRequest() {
-            parameters.put(BoardParameterName.KEY, CommonValues.KEY);
-            parameters.put(BoardParameterName.TOKEN, CommonValues.TOKEN);
+            parameters.put(BoardParameter.KEY, CommonValues.KEY);
+            parameters.put(BoardParameter.TOKEN, CommonValues.TOKEN);
             return new BoardsApi(new HashMap<>(parameters),  new HashMap<>(pathParams), method, url);
         }
     }
