@@ -1,0 +1,33 @@
+{
+    "name": "UpdatedAwesomeBoard",
+    "desc": "UpdatedAwesomeBoardDescription",
+    "closed": false,
+    "dateClosed": null,
+    "idOrganization": "60620ff07fec4020fedb84d1",
+    "idEnterprise": null,
+    "limits": null,
+    "pinned": null,
+    "shortLink": "sy5I1f4M",
+    "dateLastActivity": null,
+    "datePluginDisable": null,
+    "creationMethod": "automatic",
+    "ixUpdate": null,
+    "enterpriseOwned": false,
+    "idBoardSource": null,
+    "idMemberCreator": "5d908cb5f125d10bc8b518b2",
+    "id": "60faf3c634dda96a2f0a9ca2",
+    "starred": false,
+    "url": "https://trello.com/b/sy5I1f4M/updatedawesomeboard",
+    "subscribed": false,
+    "shortUrl": "https://trello.com/b/sy5I1f4M",
+    "templateGallery": null,
+    "memberships": [
+        {
+            "id": "60faf3c634dda96a2f0a9ca6",
+            "idMember": "5d908cb5f125d10bc8b518b2",
+            "memberType": "admin",
+            "unconfirmed": false,
+            "deactivated": false
+        }
+    ]
+}
