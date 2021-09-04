@@ -1,1 +1,3 @@
-Before running tests add your api-key, token and member id to CommonValues class
+For running tests your api-key, token and member id are required
+
+You can add them to CommonValues class
